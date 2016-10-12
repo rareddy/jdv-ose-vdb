@@ -2,7 +2,7 @@
 <vdb name="webservice" version="1">
 
     <model name="OnWeb">
-        <source name="webservice" translator-name="ws" connection-jndi-name="java:/web-ds"/>
+        <source name="webservice" translator-name="rest" connection-jndi-name="java:/web-ds"/>
     </model>
     
     <model name="test" type="VIRTUAL">
@@ -16,4 +16,8 @@
            ]]>        
         </metadata>
     </model>
+
+    <translator name="rest" type="ws">
+        <property name="DefaultBinding" value="HTTP"/>
+    </translator>	
 </vdb>
