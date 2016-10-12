@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<vdb name="webservice" version="1">
+
+    <model name="OnWeb">
+        <source name="webservice" translator-name="ws" connection-jndi-name="java:/web-ds"/>
+    </model>
+    
+    <model name="test" type="VIRTUAL">
+        <metadata type="DDL"><![CDATA[
+           CREATE  VIEW Countries AS SELECT  name, alpha2_code,alpha3_code 
+           FROM (EXEC OnWeb.invokeHttp(action=>'GET', endpoint=>'/country/get/all', stream=>'TRUE')) AS f, 
+	            XMLTABLE('/root/RestResponse/result' PASSING JSONTOXML('root', f.result) COLUMNS 
+		             name string PATH 'name/text()', 
+		             alpha2_code string PATH 'alpha2_code/text()',
+		             alpha3_code string PATH 'alpha3_code/text()') AS A;
+           ]]>        
+        </metadata>
+    </model>
+</vdb>
