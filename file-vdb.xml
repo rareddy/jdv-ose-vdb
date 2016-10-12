@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <vdb name="file" version="1">
-    <model name="MarketData">
+    <model name="filedata">
         <source name="text-connector" translator-name="file" connection-jndi-name="java:/marketdata-file"/>
     </model>
-    <model name="Stocks" type="VIRTUAL">
+    <model name="market" type="VIRTUAL">
         <metadata type="DDL"><![CDATA[
                 
         CREATE VIEW StockPrices (
-            symbol string,
+            symbol string PRIMARY KEY,
             price bigdecimal
         ) AS  
           SELECT SP.symbol, SP.price
-          FROM (EXEC MarketData.getTextFiles('*.txt')) AS f, 
+          FROM (EXEC filedata.getTextFiles('*.txt')) AS f, 
             TEXTTABLE(f.file COLUMNS symbol string, price bigdecimal HEADER) AS SP;                 
             
         ]]> </metadata>
